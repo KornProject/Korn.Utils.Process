@@ -175,10 +175,6 @@ namespace Korn.Utils
                 return;
             disposed = true;
 
-#if DEBUG
-            Debug.WriteLine($"Process {Handle.Handle} disposing");
-#endif
-
             if (isHandleInitialized)
                 ProcessHandle.Close(handle);
 

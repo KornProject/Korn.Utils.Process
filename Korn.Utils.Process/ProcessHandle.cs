@@ -34,7 +34,7 @@ namespace Korn.Utils
         public void NtSuspendProcess() 
         {
 #if DEBUG
-            Debug.WriteLine($"NtSuspendProcess: {Handle:X}");
+            Debug.WriteLine($"NtSuspendProcess: {Handle.ToHexString()}");
 #endif
             Ntdll.NtSuspendProcess(Handle); 
         }
@@ -42,7 +42,7 @@ namespace Korn.Utils
         public void NtResumeProcess()
         {
 #if DEBUG
-            Debug.WriteLine($"NtResumeProcess: {Handle:X}");
+            Debug.WriteLine($"NtResumeProcess: {Handle.ToHexString()}");
 #endif
             Ntdll.NtResumeProcess(Handle);
         }

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
-using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace Korn.Utils
 {
@@ -29,6 +28,37 @@ namespace Korn.Utils
                 while (Thread32Next(entry));
 
             return processes;
+        }
+
+#if NET8_0
+        [SkipLocalsInit]
+#endif
+        public bool IsProcessExists(string prename)
+        {
+            var prenameLength = prename.Length;
+            var prenameFootprint = StringFootprint.Footprint(prename);
+
+            int nameLength;
+            var entry = stackalloc ProcessEntry32[1];
+            entry->Size = sizeof(ProcessEntry32);
+
+            if (Thread32First(entry))
+                do
+                {
+                    var fileName = entry->GetProcessNameWithoutExtension(&nameLength);
+
+                    if (prenameLength != nameLength)
+                        continue;
+
+                    if (prenameFootprint != StringFootprint.Footprint(fileName, nameLength))
+                        continue;
+
+                    return true;
+                }
+                while (Thread32Next(entry));
+
+
+            return false;
         }
 
 #if NET8_0
@@ -62,7 +92,6 @@ namespace Korn.Utils
                     }
                     else
                     {
-
                         var name = new string((sbyte*)fileName, 0, nameLength);
                         if (name != prename)
                             continue;
