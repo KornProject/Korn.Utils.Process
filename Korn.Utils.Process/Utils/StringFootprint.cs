@@ -29,7 +29,13 @@ namespace Korn.Utils
         }
 
         public static StringFootprint Footprint(byte* inputU8String) => *(StringFootprint*)inputU8String;
-        public static StringFootprint Footprint(byte* inputU8String, int length) => unchecked(*(long*)inputU8String & ~(-1L << (length > 8 ? 8 : length) * 8));
+        public static StringFootprint Footprint(byte* inputU8String, int length)
+        {
+            var fooprint = *(ulong*)inputU8String;
+            if (length < 8)
+                fooprint &= 0xFFUL << (length - 1) * 8;
+            return fooprint;
+        }
 
         public static implicit operator ulong(StringFootprint self) => self.value;
         public static implicit operator StringFootprint(ulong value) => *(StringFootprint*)&value;
