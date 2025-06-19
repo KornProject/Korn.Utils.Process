@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using Korn.Modules.WinApi;
+using Korn.Modules.WinApi.Kernel;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
 
 namespace Korn.Utils
 {

@@ -12,7 +12,6 @@ namespace Korn.Utils
 
         public void Dispose() => Free();
 
-        public static implicit operator Address(ProcessMemoryRegion region) => region.Address;
         public static implicit operator IntPtr(ProcessMemoryRegion region) => region.Address;
     }
 }

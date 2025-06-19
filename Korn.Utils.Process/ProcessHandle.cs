@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Korn.Modules.WinApi;
+using System;
 using System.Diagnostics;
 
 namespace Korn.Utils
@@ -25,7 +26,7 @@ namespace Korn.Utils
 
         public string GetExecutableFilePath() => Psapi.GetBaseModuleFileNameEx(Handle);
 
-        public ProcessThreadHandle CreateThread(Address address, Address param, int stackSize = 0)
+        public ProcessThreadHandle CreateThread(IntPtr address, IntPtr param, int stackSize = 0)
         {
             var threadHandle = Kernel32.CreateRemoteThread(Handle, 0, stackSize, address, param, 0, null);
             return *(ProcessThreadHandle*)&threadHandle;
@@ -52,7 +53,6 @@ namespace Korn.Utils
         public static ProcessHandle Open(Process processId) => new ProcessHandle(Kernel32.OpenProcess(PROCESS_ALL_ACCESS, false, processId.ID));
         public static void Close(ProcessHandle process) => Kernel32.CloseHandle(process.Handle);
 
-        public static implicit operator Address(ProcessHandle self) => self.Handle;
         public static implicit operator IntPtr(ProcessHandle self) => self.Handle;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Xml.Schema;
-
-#pragma warning disable IDE0044 // Add readonly modifier
+﻿#pragma warning disable IDE0044 // Add readonly modifier
 namespace Korn.Utils
 {
     public unsafe struct StringFootprint

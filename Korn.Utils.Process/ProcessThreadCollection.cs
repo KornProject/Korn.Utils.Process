@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Korn.Modules.WinApi;
+using Korn.Modules.WinApi.Kernel;
+using System.Collections.Generic;
 
 namespace Korn.Utils
 {

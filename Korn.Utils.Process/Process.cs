@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics;
+﻿using Korn.Modules.WinApi;
+using System;
 using System.IO;
 
 namespace Korn.Utils
@@ -130,7 +130,7 @@ namespace Korn.Utils
 
         public void Resume() => Threads.ResumeThreads();
 
-        public ProcessThreadHandle CreateThread(Address address, Address param, int stackSize = 0) => Handle.CreateThread(address, param, stackSize);
+        public ProcessThreadHandle CreateThread(IntPtr address, IntPtr param, int stackSize = 0) => Handle.CreateThread(address, param, stackSize);
 
         public void Kill(int exitCode = 0) => Handle.Kill(exitCode);
 

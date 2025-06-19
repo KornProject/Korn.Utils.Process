@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Korn.Modules.WinApi;
+using Korn.Modules.WinApi.Kernel;
+using System;
 
 namespace Korn.Utils
 {
@@ -8,13 +10,12 @@ namespace Korn.Utils
 
         IntPtr ProcessHandle;
 
-        public ProcessMemoryRegion AllocateRegion(long size) => AllocateRegion(ProcessHandle, size);
-        public ProcessMemoryRegion AllocateRegion(Address address, long size) => AllocateRegion(ProcessHandle, address, size);
+        public ProcessMemoryRegion AllocateRegion(long size) => AllocateRegion(ProcessHandle, default, size);
+        public ProcessMemoryRegion AllocateRegion(IntPtr address, long size) => AllocateRegion(ProcessHandle, address, size);
 
-        public void Free(Address address) => FreeRegion(ProcessHandle, address);
+        public void Free(IntPtr address) => FreeRegion(ProcessHandle, address);
 
-        public static ProcessMemoryRegion AllocateRegion(IntPtr process, long size) => AllocateRegion(process, IntPtr.Zero, size);
-        public static ProcessMemoryRegion AllocateRegion(IntPtr process, Address address, long size)
+        public static ProcessMemoryRegion AllocateRegion(IntPtr process, IntPtr address, long size)
         {
             var nativeRegion = Kernel32.VirtualAllocEx(process, address, size, MemoryState.Commit | MemoryState.Reserve, MemoryProtect.ExecuteReadWrite);
             var region = new ProcessMemoryRegion(process, nativeRegion);

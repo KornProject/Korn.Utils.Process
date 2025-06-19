@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Korn.Modules.WinApi;
+using System;
 using System.Text;
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
@@ -10,26 +11,26 @@ namespace Korn.Utils
 
         IntPtr ProcessHandle;
 
-        public void Write(Address address, byte[] buffer) => Write(ProcessHandle, address, buffer);
-        public void Write(Address address, byte* buffer, int size) => Write(ProcessHandle, address, buffer, size);
-        public void Write<T>(Address address, T value) where T : unmanaged => Write(ProcessHandle, address, value);
-        public void Write<T>(Address address, T* pointer) where T : unmanaged => Write(ProcessHandle, address, pointer);
-        public byte[] Read(Address address, int length) => Read(ProcessHandle, address, length);
-        public void Read(Address source, void* destination, int length) => Read(ProcessHandle, source, destination, length);
-        public T Read<T>(Address address) where T : unmanaged => Read<T>(ProcessHandle, address);
-        public string ReadUTF8(Address address) => ReadUTF8(ProcessHandle, address);
-        public string ReadUTF8(Address address, int partSize) => ReadUTF8(ProcessHandle, address, partSize);
-        public void WriteUTF8(Address address, string text) => WriteUTF8(ProcessHandle, address, text);
+        public void Write(IntPtr address, byte[] buffer) => Write(ProcessHandle, address, buffer);
+        public void Write(IntPtr address, byte* buffer, int size) => Write(ProcessHandle, address, buffer, size);
+        public void Write<T>(IntPtr address, T value) where T : unmanaged => Write(ProcessHandle, address, value);
+        public void Write<T>(IntPtr address, T* pointer) where T : unmanaged => Write(ProcessHandle, address, pointer);
+        public byte[] Read(IntPtr address, int length) => Read(ProcessHandle, address, length);
+        public void Read(IntPtr source, void* destination, int length) => Read(ProcessHandle, source, destination, length);
+        public T Read<T>(IntPtr address) where T : unmanaged => Read<T>(ProcessHandle, address);
+        public string ReadUTF8(IntPtr address) => ReadUTF8(ProcessHandle, address);
+        public string ReadUTF8(IntPtr address, int partSize) => ReadUTF8(ProcessHandle, address, partSize);
+        public void WriteUTF8(IntPtr address, string text) => WriteUTF8(ProcessHandle, address, text);
 
-        public static void Write(IntPtr process, Address address, byte[] buffer) => Kernel32.WriteProcessMemory(process, address, buffer);
-        public static void Write(IntPtr process, Address address, byte* buffer, int size) => Kernel32.WriteProcessMemory(process, address, buffer, size);
-        public static void Write<T>(IntPtr process, Address address, T value) where T : unmanaged => Kernel32.WriteProcessMemory(process, address, value);
-        public static void Write<T>(IntPtr process, Address address, T* pointer) where T : unmanaged => Kernel32.WriteProcessMemory(process, address, pointer);
-        public static byte[] Read(IntPtr process, Address address, int length) => Kernel32.ReadProcessMemory(process, address, length);
-        public static void Read(IntPtr process, Address source, void* destination, int length) => Kernel32.ReadProcessMemory(process, source, destination, length);
-        public static T Read<T>(IntPtr process, Address address) where T : unmanaged => Kernel32.ReadProcessMemory<T>(process, address);
-        public static string ReadUTF8(IntPtr process, Address address) => ReadUTF8(process, address, 32);
-        public static string ReadUTF8(IntPtr process, Address address, int partSize)
+        public static void Write(IntPtr process, IntPtr address, byte[] buffer) => Kernel32.WriteProcessMemory(process, address, buffer);
+        public static void Write(IntPtr process, IntPtr address, byte* buffer, int size) => Kernel32.WriteProcessMemory(process, address, buffer, size);
+        public static void Write<T>(IntPtr process, IntPtr address, T value) where T : unmanaged => Kernel32.WriteProcessMemory(process, address, value);
+        public static void Write<T>(IntPtr process, IntPtr address, T* pointer) where T : unmanaged => Kernel32.WriteProcessMemory(process, address, pointer);
+        public static byte[] Read(IntPtr process, IntPtr address, int length) => Kernel32.ReadProcessMemory(process, address, length);
+        public static void Read(IntPtr process, IntPtr source, void* destination, int length) => Kernel32.ReadProcessMemory(process, source, destination, length);
+        public static T Read<T>(IntPtr process, IntPtr address) where T : unmanaged => Kernel32.ReadProcessMemory<T>(process, address);
+        public static string ReadUTF8(IntPtr process, IntPtr address) => ReadUTF8(process, address, 32);
+        public static string ReadUTF8(IntPtr process, IntPtr address, int partSize)
         {
             const int MaxLength = short.MaxValue;
 
@@ -42,7 +43,7 @@ namespace Korn.Utils
                 {
                     var pointer = pointer_;
                     pointer += offset;
-                    Read(process, address.Signed + offset, pointer, partSize);
+                    Read(process, (IntPtr)((long)address + offset), pointer, partSize);
 
                     #region Proclyato
                     var value = ((ulong*)pointer)[0];
@@ -95,7 +96,7 @@ namespace Korn.Utils
             var result = Encoding.UTF8.GetString(buffer, 0, offset);
             return result;
         }
-        public static void WriteUTF8(IntPtr process, Address address, string text)
+        public static void WriteUTF8(IntPtr process, IntPtr address, string text)
         {
             // since writing to external memory is very costly, instead of two records: a string and a null-terminator, we create a new string with null-terminator
             var bytes = Encoding.UTF8.GetBytes(text + "\0");

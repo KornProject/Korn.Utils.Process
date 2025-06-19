@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Korn.Modules.WinApi;
+using System;
 
 namespace Korn.Utils
 {

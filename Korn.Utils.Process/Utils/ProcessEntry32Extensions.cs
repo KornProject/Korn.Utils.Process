@@ -1,4 +1,6 @@
-﻿namespace Korn.Utils
+﻿using Korn.Modules.WinApi.Kernel;
+
+namespace Korn.Utils
 {
     public unsafe static class ProcessEntry32Extensions
     {
