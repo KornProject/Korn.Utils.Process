@@ -28,6 +28,8 @@ namespace Korn.Utils
             }
         }
 
+        // "some string"u8 -> (ulong*)"some str"u8
+        // "som"u8 -> *(ulong*)&"som\0\0\0\0\0"u8
         public static StringFootprint Footprint(byte* inputU8String) => *(StringFootprint*)inputU8String;
         public static StringFootprint Footprint(byte* inputU8String, int length)
         {

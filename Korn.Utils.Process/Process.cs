@@ -134,6 +134,8 @@ namespace Korn.Utils
 
         public void Kill(int exitCode = 0) => Handle.Kill(exitCode);
 
+        public bool WaitUntilExit(int timeout = -1) => Kernel32.WaitForSingleObject(Handle, timeout) == 0;
+
         static bool isCurrentInitialized;
         static Process current;
         public static Process Current
